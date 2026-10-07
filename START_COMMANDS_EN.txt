@@ -1,0 +1,77 @@
+PDF2MD 1.0.0 — start without .bat (when antivirus blocks scripts)
+================================================================
+
+STEP 0 (once). Unzip pdf2md-v1.0.0-offline-win64.zip, e.g. to  C:\pdf2md
+        The folder must contain: pdf2md.py, pdf2md_gui.py, requirements.txt
+        and the folders wheels, input, output, examples.
+        Python 3.10–3.14 (64-bit) must be installed (python.org, tick "Add python to PATH").
+        All libraries are inside the "wheels" folder — no internet is needed.
+
+        Updating from an older version? Replace the program files in your folder with the new ones and run
+        the pip line from the block below once more (the library list has changed).
+
+STEP 1. Open PowerShell:  Start → type  powershell  → Enter.
+        (If PowerShell is blocked, open cmd instead and use the CMD block below.)
+
+STEP 2. Copy the WHOLE block below, right-click into the window to paste, press Enter.
+        If your folder is not C:\pdf2md, fix the path in the first line.
+
+-------------------- POWERSHELL: copy everything between the lines --------------------
+cd "C:\pdf2md"
+py -3 --version
+py -3 -m venv venv
+.\venv\Scripts\python.exe -m pip install --no-index --find-links wheels -r requirements.txt
+.\venv\Scripts\pythonw.exe pdf2md_gui.py
+---------------------------------------------------------------------------------------
+
+What happens: 1) go to the folder; 2) check Python (prints "Python 3.1x.x"); 3) a private environment "venv" is
+created inside the folder (nothing is changed on the system); 4) libraries are installed FROM the wheels folder,
+no internet needed; 5) the program window opens.
+
+NEXT TIMES only two lines:
+cd "C:\pdf2md"
+.\venv\Scripts\pythonw.exe pdf2md_gui.py
+
+-------------------- CMD (if PowerShell is not available) -----------------------------
+cd /d "C:\pdf2md"
+py -3 --version
+py -3 -m venv venv
+venv\Scripts\python.exe -m pip install --no-index --find-links wheels -r requirements.txt
+venv\Scripts\pythonw.exe pdf2md_gui.py
+---------------------------------------------------------------------------------------
+
+Run the lines IN THIS ORDER and only after "cd". Running "py -3 -m venv venv" from C:\Windows\System32
+creates the environment there instead of in your folder.
+
+USING THE PROGRAM
+  1. "Add files…" or "Add folder…" — choose PDF and Word (.docx) documents.
+  2. Options (the defaults suit most documents):
+       Save pictures                 — pictures go to <name>_images next to the .md file
+       Remove page headers / footers — PDF: repeated text at the top/bottom of the pages is cut off
+                                       (Word headers/footers are always skipped)
+       Mark page breaks with ---     — PDF only
+       Picture quality               — PDF only, 150 dpi is usually enough
+       Remove table of contents
+       Restore Word heading numbers  — Word numbers headings automatically (1, 1.1 …) and does not store the
+                                       numbers in the text; this puts them back
+  3. "Save to" — the output folder (default: output). The window remembers your settings.
+  4. "▶ Convert". Each document becomes <name>.md (+ <name>_images). "Open output folder" opens the result.
+  Try it on examples\sample.pdf and examples\sample.docx.
+
+COMMAND LINE (no window)
+  .\venv\Scripts\python.exe pdf2md.py                       — every PDF/DOCX in input\  ->  output\
+  .\venv\Scripts\python.exe pdf2md.py C:\docs --out C:\md   — a folder (or files) to another folder
+  Options: --no-images  --keep-headers  --keep-toc  --no-numbering  --page-sep  --dpi 200
+
+IF SOMETHING GOES WRONG
+- "py is not recognized" → Python is missing or not on PATH; try replacing  py -3  with  python  in all lines.
+- "Location 'wheels' is ignored" → you are not in the program folder; run the "cd" line first.
+- pip says "No matching distribution" → Python version is outside 3.10–3.14 or it is 32-bit. Install 64-bit
+  Python 3.10–3.14, or with internet:  venv\Scripts\python.exe -m pip install -r requirements.txt
+- The window does not open and there is no error → run with python.exe to see the message:
+  venv\Scripts\python.exe pdf2md_gui.py
+- "no text found - probably a scan" → the PDF pages are pictures; run OCR first (e.g. in Acrobat).
+- "old .doc format" → open the file in Word and Save As → Word Document (.docx).
+- Pictures stay .emf/.wmf → open the document in Word and save the picture as PNG, or export the document as PDF.
+- Antivirus blocks pip / venv → ask IT to whitelist the folder; everything inside is plain Python plus the standard
+  pymupdf, pymupdf4llm, mammoth, markdownify and pillow packages from pypi.org.

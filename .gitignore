@@ -1,0 +1,25 @@
+# environment
+venv/
+.venv/
+__pycache__/
+*.pyc
+wheels/
+# your documents and results never go to git
+input/*
+output/*
+!input/.gitkeep
+!output/.gitkeep
+*.pdf
+*.docx
+*.doc
+!examples/sample.pdf
+!examples/sample.docx
+*_images/
+# window settings
+pdf2md_gui.cfg
+# OS / editors
+.DS_Store
+Thumbs.db
+~$*
+.vscode/
+.idea/
